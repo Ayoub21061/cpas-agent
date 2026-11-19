@@ -1,0 +1,17 @@
+{
+  "nb_questions": 13,
+  "exactitude_decision": 1,
+  "fausses_reponses": "0/3",
+  "refus_a_tort": "0/10",
+  "hit_at_k": 1,
+  "precision_citations": 0.683,
+  "couverture_faits": 0.86,
+  "nb_appels_llm": 11,
+  "latence_moyenne_s": 0.637,
+  "tokens_entree_moyens": 1383.182,
+  "tokens_sortie_moyens": 113.818,
+  "split": "dev",
+  "k": 4,
+  "modele": "ministral-3b-latest",
+  "date": "2026-11-19T22:05"
+}

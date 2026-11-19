@@ -122,14 +122,25 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
 
     Renvoie un dict :
         {"reponse": str, "trouve": bool,
-         "sources": [{"titre", "page", "date", "editeur", "extrait"}...]}
+         "sources":  [{"titre", "page", "date", "editeur", "extrait"}...],
+         "extraits": [{"titre", "page", "distance"}...],
+         "usage":    {"modele", "tokens_entree", "tokens_sortie", "latence_s"} ou None}
     """
     # 5.1 Recherche 
     resultats = search(question, k=k, public=public, commune=commune)
 
+    # Extraits trouvés par search() (titre, page, distance), pour l'évaluation (hit@k)
+    extraits = [{"titre": d.metadata["titre"], "page": d.metadata["page"],
+                 "distance": round(s, 3)} for d, s in resultats]
+
+    # Format de sortie commun à tous les cas
+    def resultat(reponse, trouve, sources, usage=None):
+        return {"reponse": reponse, "trouve": trouve, "sources": sources,
+                "extraits": extraits, "usage": usage}
+
     # 5.2 Rien de pertinent → réponse fixe, sans appel au LLM
     if not resultats or (max_distance is not None and resultats[0][1] > max_distance):
-        return {"reponse": PAS_DE_REPONSE, "trouve": False, "sources": []}
+        return resultat(PAS_DE_REPONSE, False, [])
 
     # 5.3 Construction de la chaîne : prompt → LLM qui renvoie du JSON validé.
     # include_raw=True : on récupère aussi le message brut, qui contient le
@@ -144,6 +155,13 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
 
     brut, parsed = sortie["raw"], sortie["parsed"]
     usage = getattr(brut, "usage_metadata", None) or {}
+    # Coût de l'appel, renvoyé avec la réponse (pour l'évaluation)
+    infos_appel = {
+        "modele": getattr(llm, "model", None) or getattr(llm, "model_name", None),
+        "tokens_entree": usage.get("input_tokens"),
+        "tokens_sortie": usage.get("output_tokens"),
+        "latence_s": round(latence, 3),
+    }
     log_call({
         "date": datetime.now(timezone.utc).isoformat(),
         "etape": "generate",
@@ -159,7 +177,7 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
     # 5.4 Le modèle n'a pas respecté le schéma JSON → on ne devine pas,
     # on répond comme si on n'avait rien trouvé.
     if parsed is None:
-        return {"reponse": PAS_DE_REPONSE, "trouve": False, "sources": []}
+        return resultat(PAS_DE_REPONSE, False, [], infos_appel)
 
     # 5.5 Citations construites par le code : on ne garde que les numéros
     # valides (entre 1 et k), sans doublons, dans l'ordre donné par le LLM.
@@ -182,9 +200,9 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
     # ce champ : une réponse est « trouvée » si elle cite au moins une source
     # valide. Sans source, la réponse n'est pas vérifiable → réponse fixe.
     if not sources:
-        return {"reponse": PAS_DE_REPONSE, "trouve": False, "sources": []}
+        return resultat(PAS_DE_REPONSE, False, [], infos_appel)
 
-    return {"reponse": parsed.reponse, "trouve": True, "sources": sources}
+    return resultat(parsed.reponse, True, sources, infos_appel)
 
 
 if __name__ == "__main__":
