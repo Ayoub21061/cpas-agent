@@ -1,0 +1,896 @@
+[
+  {
+    "id": "q01-fr",
+    "ref": "q01",
+    "langue": "fr",
+    "split": "dev",
+    "question": "Quelles sont les conditions pour avoir le revenu d'intégration ?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          4,
+          5
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "belgique"
+      ],
+      [
+        "18 ans",
+        "majeur"
+      ],
+      [
+        "travailler"
+      ],
+      [
+        "autres allocations",
+        "autres aides",
+        "faire valoir"
+      ],
+      [
+        "ressources",
+        "revenus"
+      ]
+    ]
+  },
+  {
+    "id": "q01-en",
+    "ref": "q01",
+    "langue": "en",
+    "split": "dev",
+    "question": "What are the conditions to receive the integration income?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          4,
+          5
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q01-nl",
+    "ref": "q01",
+    "langue": "nl",
+    "split": "dev",
+    "question": "Wat zijn de voorwaarden om een leefloon te krijgen?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          4,
+          5
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q01-ar",
+    "ref": "q01",
+    "langue": "ar",
+    "split": "dev",
+    "question": "ما هي الشروط للحصول على دخل الإدماج؟",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          4,
+          5
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q01-es",
+    "ref": "q01",
+    "langue": "es",
+    "split": "dev",
+    "question": "¿Cuáles son las condiciones para recibir el ingreso de integración?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          4,
+          5
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q01-tr",
+    "ref": "q01",
+    "langue": "tr",
+    "split": "dev",
+    "question": "Entegrasyon geliri almak için şartlar nelerdir?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          4,
+          5
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q02-fr",
+    "ref": "q02",
+    "langue": "fr",
+    "split": "dev",
+    "question": "En combien de temps le CPAS doit-il prendre sa décision après ma demande ?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          6
+        ]
+      },
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          8
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          26
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "30 jours",
+        "trente jours"
+      ]
+    ]
+  },
+  {
+    "id": "q02-en",
+    "ref": "q02",
+    "langue": "en",
+    "split": "dev",
+    "question": "How long does the CPAS have to make a decision after my application?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          6
+        ]
+      },
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          8
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          26
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q02-nl",
+    "ref": "q02",
+    "langue": "nl",
+    "split": "dev",
+    "question": "Binnen hoeveel tijd moet het OCMW een beslissing nemen na mijn aanvraag?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          6
+        ]
+      },
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          8
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          26
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q02-ar",
+    "ref": "q02",
+    "langue": "ar",
+    "split": "dev",
+    "question": "في غضون كم من الوقت يجب على CPAS أن يتخذ قراره بعد طلبي؟",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          6
+        ]
+      },
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          8
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          26
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q02-es",
+    "ref": "q02",
+    "langue": "es",
+    "split": "dev",
+    "question": "¿En cuánto tiempo debe el CPAS tomar su decisión después de mi solicitud?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          6
+        ]
+      },
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          8
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          26
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q02-tr",
+    "ref": "q02",
+    "langue": "tr",
+    "split": "dev",
+    "question": "CPAS başvurumdan sonra ne kadar sürede karar vermek zorunda?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          6
+        ]
+      },
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          8
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          26
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q07-fr",
+    "ref": "q07",
+    "langue": "fr",
+    "split": "dev",
+    "question": "Le CPAS doit-il me donner une preuve que j'ai introduit ma demande ?",
+    "public": "étudiant",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Fiche Le CPAS en pratique",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          22
+        ]
+      },
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          12,
+          13
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "accuse de reception",
+        "preuve"
+      ]
+    ]
+  },
+  {
+    "id": "q07-en",
+    "ref": "q07",
+    "langue": "en",
+    "split": "dev",
+    "question": "Does the CPAS have to give me proof that I submitted my application?",
+    "public": "étudiant",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Fiche Le CPAS en pratique",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          22
+        ]
+      },
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          12,
+          13
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q07-nl",
+    "ref": "q07",
+    "langue": "nl",
+    "split": "dev",
+    "question": "Moet het OCMW mij een bewijs geven dat ik mijn aanvraag heb ingediend?",
+    "public": "étudiant",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Fiche Le CPAS en pratique",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          22
+        ]
+      },
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          12,
+          13
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q07-ar",
+    "ref": "q07",
+    "langue": "ar",
+    "split": "dev",
+    "question": "هل يجب على CPAS أن يعطيني إثباتًا بأنني قدمت طلبي؟",
+    "public": "étudiant",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Fiche Le CPAS en pratique",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          22
+        ]
+      },
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          12,
+          13
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q07-es",
+    "ref": "q07",
+    "langue": "es",
+    "split": "dev",
+    "question": "¿El CPAS tiene que darme un comprobante de que presenté mi solicitud?",
+    "public": "étudiant",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Fiche Le CPAS en pratique",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          22
+        ]
+      },
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          12,
+          13
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q07-tr",
+    "ref": "q07",
+    "langue": "tr",
+    "split": "dev",
+    "question": "CPAS başvurumu yaptığıma dair bana bir belge vermek zorunda mı?",
+    "public": "étudiant",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Fiche Le CPAS en pratique",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          22
+        ]
+      },
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          12,
+          13
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q11-fr",
+    "ref": "q11",
+    "langue": "fr",
+    "split": "dev",
+    "question": "Comment se passe l'enquête sociale du CPAS ?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "assistant social"
+      ],
+      [
+        "revenus",
+        "situation financiere",
+        "banque"
+      ]
+    ]
+  },
+  {
+    "id": "q11-en",
+    "ref": "q11",
+    "langue": "en",
+    "split": "dev",
+    "question": "How does the CPAS social investigation work?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q11-nl",
+    "ref": "q11",
+    "langue": "nl",
+    "split": "dev",
+    "question": "Hoe verloopt het sociaal onderzoek van het OCMW?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q11-ar",
+    "ref": "q11",
+    "langue": "ar",
+    "split": "dev",
+    "question": "كيف يجري البحث الاجتماعي الذي يقوم به CPAS؟",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q11-es",
+    "ref": "q11",
+    "langue": "es",
+    "split": "dev",
+    "question": "¿Cómo se desarrolla la investigación social del CPAS?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q11-tr",
+    "ref": "q11",
+    "langue": "tr",
+    "split": "dev",
+    "question": "CPAS'ın sosyal incelemesi nasıl yapılıyor?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q16-fr",
+    "ref": "q16",
+    "langue": "fr",
+    "split": "dev",
+    "question": "Est-ce que je devrai rembourser le revenu d'intégration ?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          7,
+          8
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "rembourser"
+      ],
+      [
+        "fausse",
+        "retroacti",
+        "autre revenu"
+      ]
+    ]
+  },
+  {
+    "id": "q16-en",
+    "ref": "q16",
+    "langue": "en",
+    "split": "dev",
+    "question": "Will I have to pay back the integration income?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          7,
+          8
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q16-nl",
+    "ref": "q16",
+    "langue": "nl",
+    "split": "dev",
+    "question": "Zal ik het leefloon moeten terugbetalen?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          7,
+          8
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q16-ar",
+    "ref": "q16",
+    "langue": "ar",
+    "split": "dev",
+    "question": "هل سيتعين علي إرجاع دخل الإدماج؟",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          7,
+          8
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q16-es",
+    "ref": "q16",
+    "langue": "es",
+    "split": "dev",
+    "question": "¿Tendré que devolver el ingreso de integración?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          7,
+          8
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q16-tr",
+    "ref": "q16",
+    "langue": "tr",
+    "split": "dev",
+    "question": "Entegrasyon gelirini geri ödemem gerekecek mi?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          7,
+          8
+        ]
+      }
+    ],
+    "faits_attendus": []
+  },
+  {
+    "id": "q17-fr",
+    "ref": "q17",
+    "langue": "fr",
+    "split": "dev",
+    "question": "Comment faire une pâte à crêpes ?",
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": []
+  },
+  {
+    "id": "q17-en",
+    "ref": "q17",
+    "langue": "en",
+    "split": "dev",
+    "question": "How do I make pancake batter?",
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": []
+  },
+  {
+    "id": "q17-nl",
+    "ref": "q17",
+    "langue": "nl",
+    "split": "dev",
+    "question": "Hoe maak ik pannenkoekenbeslag?",
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": []
+  },
+  {
+    "id": "q17-ar",
+    "ref": "q17",
+    "langue": "ar",
+    "split": "dev",
+    "question": "كيف أحضّر عجينة الكريب؟",
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": []
+  },
+  {
+    "id": "q17-es",
+    "ref": "q17",
+    "langue": "es",
+    "split": "dev",
+    "question": "¿Cómo se hace la masa de crepes?",
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": []
+  },
+  {
+    "id": "q17-tr",
+    "ref": "q17",
+    "langue": "tr",
+    "split": "dev",
+    "question": "Krep hamuru nasıl yapılır?",
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": []
+  }
+]

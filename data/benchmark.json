@@ -1,160 +1,528 @@
 [
   {
-    "id": "q01", "split": "dev",
+    "id": "q01",
+    "split": "dev",
     "question": "Quelles sont les conditions pour avoir le revenu d'intégration ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide du revenu d'intégration", "pages": [4, 5]}],
-    "faits_attendus": [["belgique"], ["18 ans", "majeur"], ["travailler"], ["autres allocations", "autres aides", "faire valoir"], ["ressources", "revenus"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          4,
+          5
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "belgique"
+      ],
+      [
+        "18 ans",
+        "majeur"
+      ],
+      [
+        "travailler"
+      ],
+      [
+        "autres allocations",
+        "autres aides",
+        "faire valoir"
+      ],
+      [
+        "ressources",
+        "revenus"
+      ]
+    ],
     "note": "Guide RI p.4-5 : résidence, majorité, nationalité/séjour, ressources insuffisantes, prêt à travailler, faire valoir ses droits."
   },
   {
-    "id": "q02", "split": "dev",
+    "id": "q02",
+    "split": "dev",
     "question": "En combien de temps le CPAS doit-il prendre sa décision après ma demande ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide du revenu d'intégration", "pages": [6]}, {"titre": "Loi du 26 mai 2002 droit à l'intégration sociale", "pages": [8]}],
-    "faits_attendus": [["30 jours", "trente jours"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          6
+        ]
+      },
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          8
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          26
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "30 jours",
+        "trente jours"
+      ]
+    ],
     "note": "Décision dans les 30 jours, notification dans les 8 jours."
   },
   {
-    "id": "q03", "split": "test",
+    "id": "q03",
+    "split": "test",
     "question": "Combien de temps ai-je pour contester une décision du CPAS ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Loi du 26 mai 2002 droit à l'intégration sociale", "pages": [19]}, {"titre": "Guide du revenu d'intégration", "pages": [8, 9]}],
-    "faits_attendus": [["3 mois", "trois mois"], ["tribunal du travail"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          19
+        ]
+      },
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          8,
+          9
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "3 mois",
+        "trois mois"
+      ],
+      [
+        "tribunal du travail"
+      ]
+    ],
     "note": "Recours dans les 3 mois devant le tribunal du travail (Loi art. 47, p.19)."
   },
   {
-    "id": "q04", "split": "test",
+    "id": "q04",
+    "split": "test",
     "question": "Quel est le montant du revenu d'intégration pour une personne isolée ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide du revenu d'intégration", "pages": [6, 7]}],
-    "faits_attendus": [["isolé", "isolee"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          6,
+          7
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "isolé",
+        "isolee"
+      ]
+    ],
     "note": "Guide RI p.7 donne 1.214,13 € (montants 2022) : la réponse doit citer la date car les montants changent."
   },
   {
-    "id": "q05", "split": "dev",
+    "id": "q05",
+    "split": "dev",
     "question": "Quelles sont les conditions pour qu'un sans-abri obtienne une adresse de référence au CPAS ?",
-    "public": "sans-abri", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Circulaire adresse de référence", "pages": [8, 10, 11]}],
-    "faits_attendus": [["sans-abri", "sans abri"], ["aide sociale"]],
+    "public": "sans-abri",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Circulaire adresse de référence",
+        "pages": [
+          8,
+          10,
+          11
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "sans-abri",
+        "sans abri"
+      ],
+      [
+        "aide sociale"
+      ]
+    ],
     "note": "Circulaire p.8 : 3 conditions vérifiées par le CPAS (enquête sociale)."
   },
   {
-    "id": "q06", "split": "test",
+    "id": "q06",
+    "split": "test",
     "question": "J'étais sans-abri et j'ai trouvé un logement, est-ce que j'ai droit à une prime d'installation ?",
-    "public": "sans-abri", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide pour les sans-abri", "pages": [9, 22, 23]}, {"titre": "Loi organique des CPAS du 8 juillet 1976", "pages": [2]}],
-    "faits_attendus": [["prime d'installation"], ["revenu d'integration", "revenu de remplacement", "allocation"]],
+    "public": "sans-abri",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide pour les sans-abri",
+        "pages": [
+          9,
+          22,
+          23
+        ]
+      },
+      {
+        "titre": "Loi organique des CPAS du 8 juillet 1976",
+        "pages": [
+          2
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "prime d'installation"
+      ],
+      [
+        "revenu d'integration",
+        "revenu de remplacement",
+        "allocation"
+      ]
+    ],
     "note": "Guide sans-abri p.22 : 3 conditions, dont recevoir un RI ou un revenu de remplacement."
   },
   {
-    "id": "q07", "split": "dev",
+    "id": "q07",
+    "split": "dev",
     "question": "Le CPAS doit-il me donner une preuve que j'ai introduit ma demande ?",
-    "public": "étudiant", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Fiche Le CPAS en pratique", "pages": [5]}, {"titre": "Guide de l'aide sociale pour les étudiants", "pages": [22]}, {"titre": "Guide du revenu d'intégration", "pages": [5]}],
-    "faits_attendus": [["accuse de reception", "preuve"]],
+    "public": "étudiant",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Fiche Le CPAS en pratique",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          22
+        ]
+      },
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          12,
+          13
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "accuse de reception",
+        "preuve"
+      ]
+    ],
     "note": "Accusé de réception obligatoire, il prouve la date de la demande."
   },
   {
-    "id": "q08", "split": "dev",
+    "id": "q08",
+    "split": "dev",
     "question": "Qui peut bénéficier du tarif social pour le gaz et l'électricité à Anderlecht ?",
-    "public": "général", "commune": "Anderlecht", "repondable": true,
-    "sources_attendues": [{"titre": "Brochure énergie", "pages": [9, 10]}],
-    "faits_attendus": [["tarif social"], ["categorie", "allocation", "revenu d'integration"]],
+    "public": "général",
+    "commune": "Anderlecht",
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Brochure énergie",
+        "pages": [
+          9,
+          10
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "tarif social"
+      ],
+      [
+        "categorie",
+        "allocation",
+        "revenu d'integration"
+      ]
+    ],
     "note": "Brochure énergie p.10 : catégories de bénéficiaires."
   },
   {
-    "id": "q09", "split": "test",
+    "id": "q09",
+    "split": "test",
     "question": "Existe-t-il une aide si je n'arrive pas à payer ma facture d'eau ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide d'accompagnement CPAS", "pages": [20]}],
-    "faits_attendus": [["fonds social de l'eau", "eau"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide d'accompagnement CPAS",
+        "pages": [
+          20
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "fonds social de l'eau",
+        "eau"
+      ]
+    ],
     "note": "Fonds social de l'eau (Guide d'accompagnement p.20)."
   },
   {
-    "id": "q10", "split": "dev",
+    "id": "q10",
+    "split": "dev",
     "question": "Je suis en séjour illégal, est-ce que le CPAS peut m'aider pour mes frais médicaux ?",
-    "public": "étudiant", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide de l'aide sociale pour les étudiants", "pages": [21, 27, 95]}],
-    "faits_attendus": [["aide medicale urgente", "amu"]],
+    "public": "étudiant",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          21,
+          27,
+          95
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "aide medicale urgente",
+        "amu"
+      ]
+    ],
     "note": "Aide médicale urgente (AMU)."
   },
   {
-    "id": "q11", "split": "dev",
+    "id": "q11",
+    "split": "dev",
     "question": "Comment se passe l'enquête sociale du CPAS ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide du revenu d'intégration", "pages": [5, 6]}],
-    "faits_attendus": [["assistant social"], ["revenus", "situation financiere", "banque"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          5,
+          6
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "assistant social"
+      ],
+      [
+        "revenus",
+        "situation financiere",
+        "banque"
+      ]
+    ],
     "note": "Guide RI p.6 : menée par un assistant social, vérifie état civil et situation financière, visite possible."
   },
   {
-    "id": "q12", "split": "test",
+    "id": "q12",
+    "split": "test",
     "question": "C'est quoi un projet individualisé d'intégration sociale ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide du PIIS", "pages": null}, {"titre": "Loi du 26 mai 2002 droit à l'intégration sociale", "pages": [3, 4, 5]}],
-    "faits_attendus": [["contrat"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du PIIS",
+        "pages": null
+      },
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          26
+        ]
+      },
+      {
+        "titre": "Guide d'accompagnement CPAS",
+        "pages": [
+          26
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "contrat"
+      ]
+    ],
     "note": "PIIS = contrat entre la personne et le CPAS. pages null = toute page du document compte."
   },
   {
-    "id": "q13", "split": "dev",
+    "id": "q13",
+    "split": "dev",
     "question": "Le CPAS d'Etterbeek peut-il m'aider à comprendre ma facture d'énergie ?",
-    "public": "général", "commune": "Etterbeek", "repondable": true,
-    "sources_attendues": [{"titre": "L'action sociale à Etterbeek", "pages": [5]}],
-    "faits_attendus": [["facture"]],
+    "public": "général",
+    "commune": "Etterbeek",
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "L'action sociale à Etterbeek",
+        "pages": [
+          5
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "facture"
+      ]
+    ],
     "note": "Etterbeek p.5 : aide pour l'énergie."
   },
   {
-    "id": "q14", "split": "dev",
+    "id": "q14",
+    "split": "dev",
     "question": "Le CPAS de Jette peut-il m'aider à m'inscrire pour un logement social ?",
-    "public": "général", "commune": "Jette", "repondable": true,
-    "sources_attendues": [{"titre": "Aides au logement", "pages": null}],
-    "faits_attendus": [["logement social", "liste d'attente"]],
+    "public": "général",
+    "commune": "Jette",
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Aides au logement",
+        "pages": null
+      }
+    ],
+    "faits_attendus": [
+      [
+        "logement social",
+        "liste d'attente"
+      ]
+    ],
     "note": "Brochure logement de Jette (guichet social)."
   },
   {
-    "id": "q15", "split": "test",
+    "id": "q15",
+    "split": "test",
     "question": "Quel CPAS dois-je contacter pour ma demande d'aide ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide des règles de compétence territoriale", "pages": null}],
-    "faits_attendus": [["commune"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide des règles de compétence territoriale",
+        "pages": null
+      }
+    ],
+    "faits_attendus": [
+      [
+        "commune"
+      ]
+    ],
     "note": "Règle générale : CPAS de la commune où la personne réside habituellement."
   },
   {
-    "id": "q16", "split": "dev",
+    "id": "q16",
+    "split": "dev",
     "question": "Est-ce que je devrai rembourser le revenu d'intégration ?",
-    "public": "général", "commune": null, "repondable": true,
-    "sources_attendues": [{"titre": "Guide du revenu d'intégration", "pages": [7, 8]}],
-    "faits_attendus": [["rembourser"], ["fausse", "retroacti", "autre revenu"]],
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Guide du revenu d'intégration",
+        "pages": [
+          7,
+          8
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "rembourser"
+      ],
+      [
+        "fausse",
+        "retroacti",
+        "autre revenu"
+      ]
+    ],
     "note": "En principe non, sauf revenus rétroactifs ou fausses déclarations."
   },
   {
-    "id": "q17", "split": "dev",
+    "id": "q17",
+    "split": "dev",
     "question": "Comment faire une pâte à crêpes ?",
-    "public": "général", "commune": null, "repondable": false,
-    "sources_attendues": [], "faits_attendus": [], "note": "Hors sujet évident."
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": [],
+    "note": "Hors sujet évident."
   },
   {
-    "id": "q18", "split": "dev",
+    "id": "q18",
+    "split": "dev",
     "question": "Qui a gagné la Coupe du monde 2022 ?",
-    "public": "général", "commune": null, "repondable": false,
-    "sources_attendues": [], "faits_attendus": [], "note": "Hors sujet évident."
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": [],
+    "note": "Hors sujet évident."
   },
   {
-    "id": "q19", "split": "dev",
+    "id": "q19",
+    "split": "dev",
     "question": "Combien coûte un abonnement STIB par mois ?",
-    "public": "général", "commune": null, "repondable": false,
-    "sources_attendues": [], "faits_attendus": [], "note": "Bruxelles mais hors corpus."
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": [],
+    "note": "Bruxelles mais hors corpus."
   },
   {
-    "id": "q20", "split": "test",
+    "id": "q20",
+    "split": "test",
     "question": "Comment renouveler mon passeport à la commune ?",
-    "public": "général", "commune": null, "repondable": false,
-    "sources_attendues": [], "faits_attendus": [], "note": "Administratif proche du domaine mais absent des documents : cas difficile pour le seuil."
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": [],
+    "note": "Administratif proche du domaine mais absent des documents : cas difficile pour le seuil."
   },
   {
-    "id": "q21", "split": "test",
+    "id": "q21",
+    "split": "test",
     "question": "Quel est le forfait de téléphone le moins cher en Belgique ?",
-    "public": "général", "commune": null, "repondable": false,
-    "sources_attendues": [], "faits_attendus": [], "note": "Hors sujet."
+    "public": "général",
+    "commune": null,
+    "repondable": false,
+    "sources_attendues": [],
+    "faits_attendus": [],
+    "note": "Hors sujet."
   }
 ]

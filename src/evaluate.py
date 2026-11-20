@@ -26,6 +26,8 @@ import unicodedata
 from datetime import datetime
 from pathlib import Path
 from statistics import mean
+from langue import detecter_langue
+import re 
 
 from generate import generate
 from metadata import load_sources
@@ -93,6 +95,16 @@ def evaluer_cas(cas, k):
         "usage": r["usage"],
     }
 
+    ligne["question_recherche"] = r.get("question_recherche")
+
+    if "langue" in cas:
+        # La réponse est-elle dans la langue de la question ?
+        # On retire les parenthèses : la règle 8 du prompt y garde les termes
+        # officiels en français, ce qui fausserait la détection.
+        ligne["langue"] = cas["langue"]
+        ligne["langue_reponse"] = detecter_langue(re.sub(r"\([^)]*\)", " ", r["reponse"]))
+        ligne["langue_ok"] = ligne["langue_reponse"] == cas["langue"]
+
     if cas["repondable"]:
         # Recherche : une des pages attendues est-elle dans les k extraits ?
         ligne["hit"] = any(est_attendue(e["titre"], e["page"], cas["sources_attendues"])
@@ -136,6 +148,7 @@ def resumer(lignes):
         "latence_moyenne_s": moyenne([a["latence_s"] for a in appels]),
         "tokens_entree_moyens": moyenne([a["tokens_entree"] for a in appels]),
         "tokens_sortie_moyens": moyenne([a["tokens_sortie"] for a in appels]),
+        "langue_correcte": moyenne([l.get("langue_ok") for l in lignes]),
     }
 
 
@@ -144,9 +157,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--split", choices=["dev", "test", "all"], default="dev")
     parser.add_argument("-k", type=int, default=4, help="nombre d'extraits récupérés")
+    parser.add_argument("--benchmark", type=Path, default=BENCHMARK,
+                        help="fichier de questions (par défaut data/benchmark.json)")
     args = parser.parse_args()
 
-    with open(BENCHMARK, encoding="utf-8") as f:
+    with open(args.benchmark, encoding="utf-8") as f:
         cas = json.load(f)
     verifier_titres(cas)
     if args.split != "all":
@@ -161,12 +176,24 @@ if __name__ == "__main__":
         extra = ""
         if l.get("hit") is False:
             extra += "  [recherche ratée]"
+        if l.get("langue_ok") is False:
+            extra += f"  [réponse en {l['langue_reponse']}]"
         if l.get("faits_manquants"):
             extra += f"  [manque : {', '.join(f[0] for f in l['faits_manquants'])}]"
         print(f"{etat} {l['id']}  {l['question'][:60]:60}{extra}")
 
     resume = resumer(lignes)
-    resume.update({"split": args.split, "k": args.k,
+    # Résumé par langue, seulement si les questions ont un champ "langue"
+    langues = [l["langue"] for l in lignes if "langue" in l]
+    if langues:
+        par_langue = {}
+        for code in dict.fromkeys(langues):
+            r = resumer([l for l in lignes if l.get("langue") == code])
+            par_langue[code] = {c: r[c] for c in ("hit_at_k", "exactitude_decision",
+                                                  "refus_a_tort", "langue_correcte")}
+        resume["par_langue"] = par_langue
+    resume.update({"benchmark": args.benchmark.name,
+                   "split": args.split, "k": args.k,
                    # nom réel du modèle (renvoyé par generate), sinon celui du .env
                    "modele": next((l["usage"]["modele"] for l in lignes if l["usage"]),
                                   os.getenv("LLM_MODEL", "ministral-3b-latest")),
@@ -174,11 +201,17 @@ if __name__ == "__main__":
 
     print("\n--- Résumé ---")
     for cle, val in resume.items():
-        print(f"{cle:24} {val}")
+        if cle == "par_langue":
+            print("par langue :")
+            for code, m in val.items():
+                print(f"  {code}  " + "  ".join(f"{c}={v}" for c, v in m.items()))
+        else:
+            print(f"{cle:24} {val}")
 
     # Sauvegarde : détail par question + résumé (pour le rapport et l'ablation)
     RESULTS.mkdir(exist_ok=True)
-    nom = f"{datetime.now():%Y%m%d-%H%M}_{resume['modele']}_{args.split}_k{args.k}"
+    suffixe = "" if args.benchmark.name == BENCHMARK.name else f"_{args.benchmark.stem}"
+    nom = f"{datetime.now():%Y%m%d-%H%M}_{resume['modele']}{suffixe}_{args.split}_k{args.k}"
     with open(RESULTS / f"{nom}.jsonl", "w", encoding="utf-8") as f:
         for l in lignes:
             f.write(json.dumps(l, ensure_ascii=False) + "\n")

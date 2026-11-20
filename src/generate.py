@@ -16,20 +16,22 @@ import yaml
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
+from langue import detecter_langue, nom_langue, pas_de_reponse
 
 from search import search
 
 load_dotenv()
 
-PROMPT_PATH = Path("prompts/answer.yaml")
+# PROMPT_PATH = Path("prompts/answer.yaml")
+PROMPT_PATH = Path("prompts/answer_v2.yaml")
 LOG_PATH = Path("logs/llm_calls.jsonl")
 
-# Message renvoyé quand la recherche ne trouve rien d'exploitable.
-# Ecrit en dur : pas besoin d'appeler le LLM pour dire « je ne sais pas ».
-PAS_DE_REPONSE = (
-    "Je n'ai pas trouvé cette information dans mes documents. "
-    "Le mieux est de poser la question directement à votre CPAS."
-)
+# # Message renvoyé quand la recherche ne trouve rien d'exploitable.
+# # Ecrit en dur : pas besoin d'appeler le LLM pour dire « je ne sais pas ».
+# PAS_DE_REPONSE = (
+#     "Je n'ai pas trouvé cette information dans mes documents. "
+#     "Le mieux est de poser la question directement à votre CPAS."
+# )
 
 
 # 1. Format de sortie imposé au LLM
@@ -39,7 +41,8 @@ PAS_DE_REPONSE = (
 # invalide, on obtient une erreur au lieu d'un texte libre à parser à la main.
 
 class ReponseLLM(BaseModel):
-    reponse: str = Field(description="Réponse en français simple, 5 phrases maximum.")
+    # reponse: str = Field(description="Réponse en français simple, 5 phrases maximum.")
+    reponse: str = Field(description="Réponse simple dans la langue demandée, 5 phrases maximum.")
     sources: list[int] = Field(
         default_factory=list,
         description="Numéros des extraits réellement utilisés pour répondre.",
@@ -101,6 +104,41 @@ def log_call(entree):
     with open(LOG_PATH, "a", encoding="utf-8") as f:
         f.write(json.dumps(entree, ensure_ascii=False) + "\n")
 
+# 4b. Option B : traduire la question en français pour la recherche
+PROMPT_TRADUCTION = Path("prompts/traduction.yaml")
+
+def traduire_pour_recherche(question, langue, llm):
+    """
+    Les documents sont en français. Une question en néerlandais ou en arabe
+    retrouve mal les bons passages (mesuré : distance 0,47 à 0,49 contre 0,25
+    en français). On la traduit donc en français, seulement pour la recherche.
+    Questions en français : aucun appel, la question est renvoyée telle quelle.
+    """
+    if langue == "fr":
+        return question
+    template, version = load_prompt(PROMPT_TRADUCTION)
+    debut = time.perf_counter()
+    message = (template | llm).invoke({"question": question})
+    latence = time.perf_counter() - debut
+    usage = message.usage_metadata or {}
+    log_call({
+        "date": datetime.now(timezone.utc).isoformat(),
+        "etape": "traduction",
+        "modele": getattr(llm, "model", None) or getattr(llm, "model_name", None),
+        "prompt_version": version,
+        "question": question,
+        "langue": langue,
+        "tokens_entree": usage.get("input_tokens"),
+        "tokens_sortie": usage.get("output_tokens"),
+        "latence_s": round(latence, 3),
+    })
+    # return message.content.strip()
+     # Sécurité : on ne garde que la première ligne non vide, sans mise en forme,
+    # au cas où le modèle proposerait quand même plusieurs versions.
+    lignes = [l.strip() for l in message.content.splitlines() if l.strip()]
+    traduction = lignes[0].replace("**", "").strip(' "«»') if lignes else ""
+    return traduction or question
+
 
 # 5. Fonction principale
 # Seuil calibré sur un premier test (test_rag.py, 6 questions) :
@@ -110,7 +148,9 @@ def log_call(entree):
 MAX_DISTANCE = 0.45
 
 
-def generate(question, k=4, public="général", commune=None, max_distance=MAX_DISTANCE, llm=None):
+# def generate(question, k=4, public="général", commune=None, max_distance=MAX_DISTANCE, llm=None):
+def generate(question, k=4, public="général", commune=None, max_distance=MAX_DISTANCE, llm=None,
+             langue=None):
     """
     Répond à une question à partir des documents indexés.
 
@@ -126,8 +166,14 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
          "extraits": [{"titre", "page", "distance"}...],
          "usage":    {"modele", "tokens_entree", "tokens_sortie", "latence_s"} ou None}
     """
-    # 5.1 Recherche 
-    resultats = search(question, k=k, public=public, commune=commune)
+
+    # 5.0 Langue de la réponse, détectée par le code (sauf si on la donne)
+    langue = langue or detecter_langue(question)
+
+    # 5.1 Recherche, avec la question traduite en français si besoin (option B)
+    llm = llm or get_llm()
+    question_recherche = traduire_pour_recherche(question, langue, llm)
+    resultats = search(question_recherche, k=k, public=public, commune=commune)
 
     # Extraits trouvés par search() (titre, page, distance), pour l'évaluation (hit@k)
     extraits = [{"titre": d.metadata["titre"], "page": d.metadata["page"],
@@ -135,12 +181,16 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
 
     # Format de sortie commun à tous les cas
     def resultat(reponse, trouve, sources, usage=None):
+        # return {"reponse": reponse, "trouve": trouve, "sources": sources,
+        #         "extraits": extraits, "usage": usage}
         return {"reponse": reponse, "trouve": trouve, "sources": sources,
-                "extraits": extraits, "usage": usage}
+                "extraits": extraits, "usage": usage, "langue": langue,
+                "question_recherche": question_recherche}
 
     # 5.2 Rien de pertinent → réponse fixe, sans appel au LLM
     if not resultats or (max_distance is not None and resultats[0][1] > max_distance):
-        return resultat(PAS_DE_REPONSE, False, [])
+        # return resultat(PAS_DE_REPONSE, False, [])
+        return resultat(pas_de_reponse(langue), False, [])
 
     # 5.3 Construction de la chaîne : prompt → LLM qui renvoie du JSON validé.
     # include_raw=True : on récupère aussi le message brut, qui contient le
@@ -150,7 +200,9 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
     chaine = template | llm.with_structured_output(ReponseLLM, include_raw=True)
 
     debut = time.perf_counter()
-    sortie = chaine.invoke({"contexte": format_contexte(resultats), "question": question})
+    # sortie = chaine.invoke({"contexte": format_contexte(resultats), "question": question})
+    sortie = chaine.invoke({"contexte": format_contexte(resultats), "question": question,
+                            "langue": nom_langue(langue)})
     latence = time.perf_counter() - debut
 
     brut, parsed = sortie["raw"], sortie["parsed"]
@@ -172,20 +224,26 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
         "tokens_sortie": usage.get("output_tokens"),
         "latence_s": round(latence, 3),
         "erreur_format": parsed is None,
+        "langue": langue,
     })
 
     # 5.4 Le modèle n'a pas respecté le schéma JSON → on ne devine pas,
     # on répond comme si on n'avait rien trouvé.
     if parsed is None:
-        return resultat(PAS_DE_REPONSE, False, [], infos_appel)
+        # return resultat(PAS_DE_REPONSE, False, [], infos_appel)
+        return resultat(pas_de_reponse(langue), False, [], infos_appel)
 
     # 5.5 Citations construites par le code : on ne garde que les numéros
     # valides (entre 1 et k), sans doublons, dans l'ordre donné par le LLM.
     sources = []
+    deja_vues = set()
     for n in dict.fromkeys(parsed.sources):
         if 1 <= n <= len(resultats):
             doc, _ = resultats[n - 1]
             m = doc.metadata
+            if (m["titre"], m["page"]) in deja_vues:
+                continue                     # même page, autre morceau
+            deja_vues.add((m["titre"], m["page"]))
             sources.append({
                 "titre": m["titre"],
                 "page": m["page"],
@@ -200,7 +258,8 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
     # ce champ : une réponse est « trouvée » si elle cite au moins une source
     # valide. Sans source, la réponse n'est pas vérifiable → réponse fixe.
     if not sources:
-        return resultat(PAS_DE_REPONSE, False, [], infos_appel)
+        # return resultat(PAS_DE_REPONSE, False, [], infos_appel)
+        return resultat(pas_de_reponse(langue), False, [], infos_appel)
 
     return resultat(parsed.reponse, True, sources, infos_appel)
 
@@ -216,6 +275,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     r = generate(args.question, k=args.k, public=args.public, commune=args.commune)
+    if r["question_recherche"] != args.question:
+        print("Recherche faite avec :", r["question_recherche"])
     print("\n" + r["reponse"])
     if r["sources"]:
         print("\nSources :")
