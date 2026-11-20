@@ -1,0 +1,57 @@
+{
+  "nb_questions": 36,
+  "exactitude_decision": 1,
+  "fausses_reponses": "0/6",
+  "refus_a_tort": "0/30",
+  "hit_at_k": 1,
+  "precision_citations": 0.522,
+  "couverture_faits": 0.76,
+  "nb_appels_llm": 30,
+  "latence_moyenne_s": 0.929,
+  "tokens_entree_moyens": 1402.6,
+  "tokens_sortie_moyens": 128.2,
+  "langue_correcte": 1,
+  "par_langue": {
+    "fr": {
+      "hit_at_k": 1,
+      "exactitude_decision": 1,
+      "refus_a_tort": "0/5",
+      "langue_correcte": 1
+    },
+    "en": {
+      "hit_at_k": 1,
+      "exactitude_decision": 1,
+      "refus_a_tort": "0/5",
+      "langue_correcte": 1
+    },
+    "nl": {
+      "hit_at_k": 1,
+      "exactitude_decision": 1,
+      "refus_a_tort": "0/5",
+      "langue_correcte": 1
+    },
+    "ar": {
+      "hit_at_k": 1,
+      "exactitude_decision": 1,
+      "refus_a_tort": "0/5",
+      "langue_correcte": 1
+    },
+    "es": {
+      "hit_at_k": 1,
+      "exactitude_decision": 1,
+      "refus_a_tort": "0/5",
+      "langue_correcte": 1
+    },
+    "tr": {
+      "hit_at_k": 1,
+      "exactitude_decision": 1,
+      "refus_a_tort": "0/5",
+      "langue_correcte": 1
+    }
+  },
+  "benchmark": "benchmark_langues.json",
+  "split": "dev",
+  "k": 4,
+  "modele": "ministral-3b-latest",
+  "date": "2026-11-20T17:57"
+}

@@ -197,7 +197,8 @@ if __name__ == "__main__":
                    # nom réel du modèle (renvoyé par generate), sinon celui du .env
                    "modele": next((l["usage"]["modele"] for l in lignes if l["usage"]),
                                   os.getenv("LLM_MODEL", "ministral-3b-latest")),
-                   "date": datetime.now().isoformat(timespec="minutes")})
+                   "date": datetime.now().isoformat(timespec="minutes"
+                   "modele_traduction": os.getenv("TRADUCTION_MODEL") or "même modèle",)})
 
     print("\n--- Résumé ---")
     for cle, val in resume.items():

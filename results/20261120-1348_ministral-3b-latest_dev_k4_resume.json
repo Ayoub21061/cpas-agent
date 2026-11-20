@@ -1,0 +1,19 @@
+{
+  "nb_questions": 13,
+  "exactitude_decision": 1,
+  "fausses_reponses": "0/3",
+  "refus_a_tort": "0/10",
+  "hit_at_k": 1,
+  "precision_citations": 0.675,
+  "couverture_faits": 0.83,
+  "nb_appels_llm": 11,
+  "latence_moyenne_s": 1.086,
+  "tokens_entree_moyens": 1484.909,
+  "tokens_sortie_moyens": 103,
+  "langue_correcte": null,
+  "benchmark": "benchmark.json",
+  "split": "dev",
+  "k": 4,
+  "modele": "ministral-3b-latest",
+  "date": "2026-11-20T13:48"
+}

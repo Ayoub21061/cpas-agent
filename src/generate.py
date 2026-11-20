@@ -72,6 +72,18 @@ def get_llm():
     from langchain_mistralai import ChatMistralAI
     return ChatMistralAI(model=os.getenv("LLM_MODEL", "ministral-3b-latest"), temperature=0)
 
+def get_llm_traduction(llm_principal):
+    """
+    Modèle utilisé pour traduire la question (option B).
+    Par défaut, le même que pour la réponse. Si TRADUCTION_MODEL est défini
+    dans le .env, on utilise ce modèle, par exemple un modèle plus grand,
+    meilleur en turc ou en arabe, pour cet appel court uniquement.
+    """
+    modele = os.getenv("TRADUCTION_MODEL")
+    if not modele:
+        return llm_principal
+    from langchain_mistralai import ChatMistralAI
+    return ChatMistralAI(model=modele, temperature=0)
 
 # 3. Prompt
 def load_prompt(path=PROMPT_PATH):
@@ -172,7 +184,7 @@ def generate(question, k=4, public="général", commune=None, max_distance=MAX_D
 
     # 5.1 Recherche, avec la question traduite en français si besoin (option B)
     llm = llm or get_llm()
-    question_recherche = traduire_pour_recherche(question, langue, llm)
+    question_recherche = traduire_pour_recherche(question, langue, get_llm_traduction(llm))
     resultats = search(question_recherche, k=k, public=public, commune=commune)
 
     # Extraits trouvés par search() (titre, page, distance), pour l'évaluation (hit@k)
