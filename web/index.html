@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assistant CPAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --papier: #F7F8F5;
+    --panneau: #ECEEE8;
+    --encre: #1D2238;
+    --gris: #5A5F72;
+    --trait: #D3D6CC;
+    --bic: #2440B8;
+    --bic-fonce: #182E8C;
+    --surligneur: #FFE45C;
+    --vert: #1F6E4E;
+    --rouge: #A8261E;
+    --rouge-fond: #FBEDEB;
+
+    --t-petit: 0.875rem;
+    --t-corps: 1.0625rem;
+    --t-titre3: 1.3125rem;
+    --t-titre2: 1.75rem;
+    --t-titre1: 2.5rem;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 100%; }
+  body {
+    margin: 0;
+    background: var(--papier);
+    color: var(--encre);
+    font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+    font-size: var(--t-corps);
+    line-height: 1.55;
+  }
+  h1, h2, h3 { line-height: 1.2; margin: 0; font-weight: 700; }
+  a { color: var(--bic); }
+  :focus-visible { outline: 3px solid var(--bic); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* En-tête */
+  .entete {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+    padding: 1rem 2rem; border-bottom: 1px solid var(--trait); background: var(--papier);
+    position: sticky; top: 0; z-index: 5; flex-wrap: wrap;
+  }
+  .marque { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+  .marque strong { font-size: var(--t-titre3); }
+  .marque span { color: var(--gris); font-size: var(--t-petit); }
+  .onglets { display: flex; gap: 0.25rem; }
+  .onglets button {
+    font: inherit; border: 0; background: none; color: var(--gris);
+    padding: 0.5rem 0.9rem; border-radius: 6px; cursor: pointer;
+  }
+  .onglets button[aria-selected="true"] { color: var(--encre); background: var(--panneau); font-weight: 700; }
+
+  /* Vue démo */
+  .demo {
+    display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 3rem;
+    max-width: 1180px; margin: 0 auto; padding: 2.5rem 2rem 3rem;
+  }
+  .profil { position: sticky; top: 5.5rem; align-self: start; }
+  .profil h2 { font-size: var(--t-titre3); margin-bottom: 1rem; }
+  fieldset { border: 0; padding: 0; margin: 0 0 1.5rem; }
+  legend { font-weight: 700; margin-bottom: 0.5rem; padding: 0; }
+  .choix { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0; cursor: pointer; }
+  .choix input { width: 1.15rem; height: 1.15rem; accent-color: var(--bic); margin: 0; }
+  select {
+    font: inherit; width: 100%; padding: 0.55rem 0.6rem; border: 1px solid var(--trait);
+    border-radius: 6px; background: white; color: var(--encre);
+  }
+  .aide { color: var(--gris); font-size: var(--t-petit); margin: 0.5rem 0 0; }
+  .rappel {
+    border-top: 1px solid var(--trait); padding-top: 1.25rem; margin-top: 0.5rem;
+    color: var(--gris); font-size: var(--t-petit);
+  }
+  .rappel p { margin: 0 0 0.6rem; }
+  .bascule { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; margin-top: 1rem; font-size: var(--t-petit); }
+  .bascule input { width: 1.05rem; height: 1.05rem; accent-color: var(--bic); margin: 0; }
+
+  .principal { min-width: 0; max-width: 760px; }
+  .accueil h1 { font-size: var(--t-titre1); max-width: 16ch; margin-bottom: 0.75rem; }
+  .accueil p { color: var(--gris); max-width: 58ch; margin: 0 0 2rem; }
+
+  .fil { display: flex; flex-direction: column; gap: 2rem; margin-bottom: 2rem; }
+  .fil:empty { margin: 0; }
+  .question-utilisateur {
+    align-self: flex-end; max-width: 85%; background: var(--panneau);
+    padding: 0.8rem 1.1rem; border-radius: 14px 14px 4px 14px;
+  }
+  .question-utilisateur .profil-question { display: block; color: var(--gris); font-size: var(--t-petit); margin-top: 0.25rem; }
+
+  .reponse { border-left: 3px solid var(--vert); padding-left: 1.25rem; }
+  .reponse.introuvable { border-left-color: var(--trait); }
+  .reponse .statut { font-size: var(--t-petit); font-weight: 700; color: var(--vert); margin: 0 0 0.5rem; }
+  .reponse.introuvable .statut { color: var(--gris); }
+  .reponse .texte { margin: 0 0 1.25rem; }
+  .reponse .texte p { margin: 0 0 0.75rem; }
+
+  .sources h3 { font-size: var(--t-corps); margin-bottom: 0.75rem; }
+  .sources ol { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
+  .source blockquote { margin: 0 0 0.35rem; font-size: var(--t-petit); line-height: 1.7; }
+  .source mark {
+    background: linear-gradient(transparent 12%, var(--surligneur) 12%, var(--surligneur) 88%, transparent 88%);
+    color: var(--encre); padding: 0 0.15em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  }
+  .source .ref { font-size: var(--t-petit); color: var(--gris); margin: 0; }
+  .source .ref strong { color: var(--encre); }
+  .ancien { display: inline-block; margin-top: 0.25rem; font-size: var(--t-petit); color: var(--rouge); }
+
+  .urgence {
+    background: var(--rouge-fond); border: 2px solid var(--rouge); border-radius: 10px; padding: 1.25rem 1.4rem;
+  }
+  .urgence h3 { color: var(--rouge); font-size: var(--t-titre3); margin-bottom: 0.5rem; }
+  .urgence p { margin: 0 0 0.75rem; }
+  .urgence ul { margin: 0; padding-left: 1.2rem; }
+  .urgence li { margin-bottom: 0.35rem; }
+
+  .erreur { border-left: 3px solid var(--rouge); padding-left: 1.25rem; }
+  .erreur p { margin: 0 0 0.4rem; }
+  .erreur code { font-size: var(--t-petit); color: var(--gris); word-break: break-word; }
+
+  .technique {
+    margin-top: 1.25rem; background: white; border: 1px solid var(--trait); border-radius: 8px;
+    padding: 0.9rem 1rem; font-size: var(--t-petit);
+  }
+  .technique table { width: 100%; border-collapse: collapse; }
+  .technique th, .technique td { text-align: left; padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top; }
+  .technique th { color: var(--gris); font-weight: 400; }
+  .technique .chiffre { font-variant-numeric: tabular-nums; }
+  .technique p { margin: 0.6rem 0 0; color: var(--gris); }
+
+  .attente { color: var(--gris); padding-left: 1.4rem; }
+  .attente .ligne {
+    display: block; height: 0.9rem; width: 0; margin-top: 0.6rem; max-width: 22rem;
+    background: var(--surligneur); border-radius: 2px;
+    animation: surligner 1.6s ease-in-out infinite;
+  }
+  @keyframes surligner { 0% { width: 0; opacity: 1; } 70% { width: 100%; opacity: 1; } 100% { width: 100%; opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .attente .ligne { animation: none; width: 40%; } }
+
+  .formulaire { position: sticky; bottom: 0; background: var(--papier); padding: 1rem 0 1.5rem; }
+  .saisie {
+    display: flex; gap: 0.75rem; align-items: flex-end; background: white;
+    border: 1.5px solid var(--encre); border-radius: 12px; padding: 0.6rem 0.6rem 0.6rem 1rem;
+  }
+  .saisie:focus-within { border-color: var(--bic); box-shadow: 0 0 0 3px rgba(36, 64, 184, 0.18); }
+  textarea {
+    flex: 1; font: inherit; border: 0; resize: none; background: transparent; color: var(--encre);
+    min-height: 2.8rem; max-height: 10rem; padding: 0.45rem 0; outline: none;
+  }
+  textarea:focus-visible { outline: none; }
+  .bouton {
+    font: inherit; font-weight: 700; border: 0; border-radius: 8px; cursor: pointer;
+    background: var(--bic); color: white; padding: 0.65rem 1.25rem; white-space: nowrap;
+  }
+  .bouton:hover { background: var(--bic-fonce); }
+  .bouton:disabled { background: var(--gris); cursor: wait; }
+  .exemples { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .exemples button {
+    font: inherit; font-size: var(--t-petit); background: none; color: var(--bic);
+    border: 1px solid var(--trait); border-radius: 999px; padding: 0.4rem 0.85rem; cursor: pointer; text-align: left;
+  }
+  .exemples button:hover { border-color: var(--bic); }
+  .compteur { color: var(--gris); font-size: var(--t-petit); margin: 0.5rem 0 0; }
+
+  /* Vue projet */
+  .projet { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+  .projet > section { margin-bottom: 3.5rem; }
+  .projet h1 { font-size: var(--t-titre1); max-width: 20ch; margin-bottom: 1rem; }
+  .projet h2 { font-size: var(--t-titre2); margin-bottom: 1rem; }
+  .projet p { max-width: 68ch; margin: 0 0 1rem; }
+  .projet .chapeau { font-size: var(--t-titre3); color: var(--gris); }
+  .etapes { list-style: none; padding: 0; margin: 0; counter-reset: etape; }
+  .etapes li {
+    counter-increment: etape; display: grid; grid-template-columns: 3rem 1fr; gap: 0.25rem 1rem;
+    padding: 1rem 0; border-top: 1px solid var(--trait);
+  }
+  .etapes li::before { content: counter(etape); font-size: var(--t-titre2); font-weight: 700; color: var(--bic); grid-row: span 2; line-height: 1; }
+  .etapes strong { font-size: var(--t-titre3); }
+  .etapes span { color: var(--gris); }
+  .tableau { width: 100%; border-collapse: collapse; font-size: var(--t-petit); }
+  .tableau th, .tableau td { text-align: left; padding: 0.6rem 0.75rem 0.6rem 0; border-bottom: 1px solid var(--trait); vertical-align: top; }
+  .tableau th { color: var(--gris); font-weight: 400; }
+  .tableau td.chiffre { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mesures { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem 2rem; margin: 1.5rem 0; }
+  .mesure strong { display: block; font-size: var(--t-titre1); line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .mesure span { color: var(--gris); font-size: var(--t-petit); }
+  .deux-colonnes { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .deux-colonnes ul { padding-left: 1.2rem; margin: 0; }
+  .deux-colonnes li { margin-bottom: 0.5rem; }
+  .deux-colonnes h3 { font-size: var(--t-titre3); margin-bottom: 0.75rem; }
+
+  @media (max-width: 860px) {
+    .entete { padding: 0.85rem 1rem; }
+    .demo { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem 1rem 2rem; }
+    .profil { position: static; order: 2; }
+    .principal { order: 1; }
+    .accueil h1, .projet h1 { font-size: var(--t-titre2); }
+    .projet { padding: 2rem 1rem 3rem; }
+    .deux-colonnes { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="entete">
+  <div class="marque">
+    <strong>Assistant CPAS</strong>
+    <span>Projet du cours AI project, ECAM</span>
+  </div>
+  <nav class="onglets" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-demo" aria-controls="vue-demo" aria-selected="true">Essayer l'agent</button>
+    <button role="tab" id="tab-projet" aria-controls="vue-projet" aria-selected="false">Le projet</button>
+  </nav>
+</header>
+
+<!-- Vue 1 : démo de l'agent -->
+<main id="vue-demo" role="tabpanel" aria-labelledby="tab-demo" class="demo">
+  <aside class="profil" aria-label="Profil de la personne">
+    <h2>Qui pose la question ?</h2>
+    <fieldset>
+      <legend>Situation</legend>
+      <label class="choix"><input type="radio" name="public" value="général" checked> Une personne en général</label>
+      <label class="choix"><input type="radio" name="public" value="étudiant"> Un étudiant ou une étudiante</label>
+      <label class="choix"><input type="radio" name="public" value="sans-abri"> Une personne sans abri</label>
+    </fieldset>
+    <fieldset>
+      <legend><label for="commune">Commune</label></legend>
+      <select id="commune">
+        <option value="">Je ne sais pas ou autre</option>
+        <option>Anderlecht</option><option>Auderghem</option><option>Berchem-Sainte-Agathe</option>
+        <option>Bruxelles</option><option>Etterbeek</option><option>Evere</option><option>Forest</option>
+        <option>Ganshoren</option><option>Ixelles</option><option>Jette</option><option>Koekelberg</option>
+        <option>Molenbeek-Saint-Jean</option><option>Saint-Gilles</option><option>Saint-Josse-ten-Noode</option>
+        <option>Schaerbeek</option><option>Uccle</option><option>Watermael-Boitsfort</option>
+        <option>Woluwe-Saint-Lambert</option><option>Woluwe-Saint-Pierre</option>
+      </select>
+      <p class="aide">Des documents propres à la commune existent pour Anderlecht, Etterbeek et Jette. Pour les autres, l'agent utilise les règles valables partout.</p>
+    </fieldset>
+    <div class="rappel">
+      <p>L'agent donne des informations, il ne prend aucune décision. Seul le CPAS décide, après avoir examiné votre situation.</p>
+      <p>Aucune question n'est conservée après la fermeture de la page.</p>
+      <label class="bascule"><input type="checkbox" id="technique"> Afficher les détails techniques</label>
+    </div>
+  </aside>
+
+  <div class="principal">
+    <div class="accueil" id="accueil">
+      <h1>Posez votre question sur le CPAS</h1>
+      <p>L'agent cherche la réponse dans des documents officiels sur le CPAS et vous indique d'où vient chaque information. S'il ne trouve pas, il vous le dit.</p>
+    </div>
+
+    <div class="fil" id="fil" aria-live="polite"></div>
+
+    <form class="formulaire" id="formulaire">
+      <label for="question" class="sr-only">Votre question</label>
+      <div class="saisie">
+        <textarea id="question" rows="1" placeholder="Écrivez votre question ici" maxlength="500"></textarea>
+        <button class="bouton" type="submit" id="envoyer">Envoyer</button>
+      </div>
+    </form>
+    <div id="suggestions">
+      <div class="exemples" id="exemples" aria-label="Exemples de questions"></div>
+      <p class="compteur" id="corpus-info"></p>
+    </div>
+  </div>
+</main>
+
+<!-- Vue 2 : présentation du projet -->
+<main id="vue-projet" role="tabpanel" aria-labelledby="tab-projet" class="projet" hidden>
+  <section>
+    <h1>Aider chacun à faire valoir ses droits au CPAS</h1>
+    <p class="chapeau">En Belgique, beaucoup de personnes qui ont droit à une aide du CPAS ne la demandent pas. Elles ne connaissent pas leurs droits, les règles sont complexes, et les démarches passent par l'écrit et le numérique.</p>
+    <p>Notre agent répond aux questions en langage simple, à partir de documents officiels, et indique toujours ses sources. Il s'adresse aux demandeurs, mais aussi aux travailleurs sociaux qui les accompagnent. Le projet vise la cible 1.3 des Objectifs de développement durable : une protection sociale pour tous.</p>
+  </section>
+
+  <section>
+    <h2>Comment l'agent répond</h2>
+    <ol class="etapes">
+      <li><strong>Il tient compte de la personne</strong><span>Sa situation (étudiant, sans abri) et sa commune déterminent quels documents sont consultés.</span></li>
+      <li><strong>Il cherche dans les documents</strong><span>La question est comparée aux passages des documents grâce au modèle mistral-embed, et les 4 passages les plus proches sont retenus.</span></li>
+      <li><strong>Il vérifie que la question est couverte</strong><span>Si aucun passage n'est assez proche, l'agent répond qu'il ne sait pas, sans même appeler le modèle de langage.</span></li>
+      <li><strong>Il rédige une réponse courte</strong><span>Un modèle Mistral écrit la réponse uniquement à partir des passages trouvés, en français simple.</span></li>
+      <li><strong>Il contrôle ses sources</strong><span>Le programme vérifie que chaque source citée a bien été fournie au modèle. Une réponse sans source n'est jamais affichée.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Les documents utilisés</h2>
+    <p id="corpus-resume">Chargement…</p>
+    <table class="tableau">
+      <thead><tr><th scope="col">Document</th><th scope="col">Éditeur</th><th scope="col">Version</th><th scope="col">Public</th><th scope="col">Commune</th></tr></thead>
+      <tbody id="corpus"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Résultats du dernier test</h2>
+    <p id="bench-intro">Chargement…</p>
+    <div class="mesures" id="mesures"></div>
+  </section>
+
+  <section class="deux-colonnes">
+    <div>
+      <h3>Les protections en place</h3>
+      <ul>
+        <li>Réponses uniquement à partir des documents, toujours sourcées</li>
+        <li>« Je ne sais pas » quand la question n'est pas couverte</li>
+        <li>Contacts d'urgence affichés immédiatement en cas de détresse</li>
+        <li>Les documents sont traités comme des données, jamais comme des instructions</li>
+        <li>Aucune donnée personnelle conservée</li>
+      </ul>
+    </div>
+    <div>
+      <h3>La suite du projet</h3>
+      <ul>
+        <li>Un parcours guidé qui pose des questions pour comprendre la situation</li>
+        <li>La liste personnalisée des documents à réunir pour le dossier</li>
+        <li>L'explication d'un courrier administratif à partir d'une photo</li>
+        <li>Un mode vocal pour les personnes en difficulté avec l'écrit</li>
+        <li>Un modèle qui fonctionne entièrement en local</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<script>
+const EXEMPLES = [
+  "Quelles sont les conditions pour avoir le revenu d'intégration ?",
+  "En combien de temps le CPAS doit-il prendre sa décision ?",
+  "Je ne suis pas d'accord avec la décision du CPAS, que faire ?",
+  "Je suis sans abri, comment avoir une adresse de référence ?",
+  "Je n'arrive plus à payer ma facture d'énergie",
+  "Est-ce que je devrai rembourser le revenu d'intégration ?",
+];
+
+const $ = (id) => document.getElementById(id);
+const fil = $("fil");
+const champ = $("question");
+const bouton = $("envoyer");
+
+function echapper(texte) {
+  return String(texte ?? "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+// Le modèle écrit parfois du **gras** et des listes : on garde l'essentiel, sans HTML brut.
+function miseEnForme(texte) {
+  const sur = echapper(texte).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  return sur.split(/\n{2,}/).map((bloc) => `<p>${bloc.replace(/\n/g, "<br>")}</p>`).join("");
+}
+
+function libellePublic(p) {
+  return { "général": "Personne en général", "étudiant": "Étudiant ou étudiante", "sans-abri": "Personne sans abri" }[p] || p;
+}
+
+function profilCourant() {
+  return {
+    public: document.querySelector('input[name="public"]:checked').value,
+    commune: $("commune").value || null,
+  };
+}
+
+// Onglets
+function afficherVue(nom) {
+  for (const v of ["demo", "projet"]) {
+    $("tab-" + v).setAttribute("aria-selected", String(v === nom));
+    $("vue-" + v).hidden = v !== nom;
+  }
+}
+$("tab-demo").addEventListener("click", () => afficherVue("demo"));
+$("tab-projet").addEventListener("click", () => afficherVue("projet"));
+
+// Exemples de questions
+for (const q of EXEMPLES) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = q;
+  b.addEventListener("click", () => { champ.value = q; poser(); });
+  $("exemples").appendChild(b);
+}
+
+// Zone de saisie qui grandit avec le texte ; Entrée envoie, Maj+Entrée va à la ligne
+champ.addEventListener("input", () => { champ.style.height = "auto"; champ.style.height = champ.scrollHeight + "px"; });
+champ.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); poser(); }
+});
+$("formulaire").addEventListener("submit", (e) => { e.preventDefault(); poser(); });
+
+// Détails techniques visibles ou non, y compris sur les réponses déjà affichées
+$("technique").addEventListener("change", (e) => {
+  document.querySelectorAll(".technique").forEach((t) => (t.hidden = !e.target.checked));
+});
+
+function ajouter(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  const el = div.firstElementChild;
+  fil.appendChild(el);
+  return el;
+}
+
+function blocTechnique(r) {
+  const lignes = (r.extraits || []).map((e, i) => `
+    <tr><td class="chiffre">${i + 1}</td><td>${echapper(e.titre)}, p. ${e.page}</td>
+    <td class="chiffre">${Number(e.distance).toFixed(3).replace(".", ",")}</td></tr>`).join("");
+  const u = r.usage;
+  const cout = u
+    ? `Modèle ${echapper(u.modele)}, ${u.tokens_entree ?? "?"} tokens en entrée, ${u.tokens_sortie ?? "?"} en sortie, ${u.latence_s} s.`
+    : "Aucun appel au modèle de langage : la question a été écartée avant.";
+  return `<div class="technique" ${$("technique").checked ? "" : "hidden"}>
+    <table><thead><tr><th scope="col">#</th><th scope="col">Passage retrouvé</th><th scope="col">Distance</th></tr></thead>
+    <tbody>${lignes || '<tr><td colspan="3">Aucun passage</td></tr>'}</tbody></table>
+    <p>${cout} Seuil de pertinence : 0,45 (plus la distance est petite, plus le passage est proche).</p>
+  </div>`;
+}
+
+function blocSources(sources) {
+  const items = sources.map((s) => {
+    const annee = parseInt(String(s.date).slice(0, 4), 10);
+    const ancien = annee && annee < 2020
+      ? `<span class="ancien">Document de ${annee} : certaines règles ont pu changer, vérifiez auprès du CPAS.</span>` : "";
+    return `<li class="source">
+      <blockquote><mark>${echapper(s.extrait.trim().replace(/[.…\s]+$/, ""))}…</mark></blockquote>
+      <p class="ref"><strong>${echapper(s.titre)}</strong>, page ${s.page}. ${echapper(s.editeur)}, version ${echapper(s.date)}.</p>
+      ${ancien}
+    </li>`;
+  }).join("");
+  return `<div class="sources"><h3>D'où vient cette réponse</h3><ol>${items}</ol></div>`;
+}
+
+function blocUrgence(type) {
+  const intro = {
+    vie: "Vous traversez un moment très difficile. Vous pouvez en parler maintenant, gratuitement et de façon anonyme.",
+    danger: "Votre sécurité passe avant tout.",
+    rue: "Votre situation est urgente. Le CPAS de la commune où vous vous trouvez doit examiner une demande d'aide urgente.",
+  }[type];
+  return `<div class="urgence" role="alert">
+    <h3>Contactez quelqu'un maintenant</h3>
+    <p>${intro}</p>
+    <ul>
+      <li>En cas de danger immédiat : appelez le <strong>112</strong>.</li>
+      ${type === "vie" ? "<li>Centre de prévention du suicide : <strong>0800 32 123</strong>, gratuit, jour et nuit.</li>" : ""}
+      <li>Rendez-vous au CPAS de la commune où vous êtes, ou demandez à quelqu'un de vous y accompagner.</li>
+    </ul>
+  </div>`;
+}
+
+async function poser() {
+  const question = champ.value.trim();
+  if (question.length < 3 || bouton.disabled) return;
+  const profil = profilCourant();
+
+  $("accueil").hidden = true;
+  $("suggestions").hidden = true;
+  const precision = [libellePublic(profil.public), profil.commune].filter(Boolean).join(", ");
+  ajouter(`<div class="question-utilisateur">${echapper(question)}<span class="profil-question">${echapper(precision)}</span></div>`);
+  champ.value = ""; champ.style.height = "auto";
+  bouton.disabled = true; bouton.textContent = "Recherche…";
+  const attente = ajouter(`<div class="attente">L'agent cherche dans les documents<span class="ligne"></span></div>`);
+  attente.scrollIntoView({ behavior: "smooth", block: "end" });
+
+  try {
+    const rep = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question, ...profil }),
+    });
+    const r = await rep.json();
+    attente.remove();
+
+    if (!rep.ok) {
+      ajouter(`<div class="erreur"><p><strong>${echapper(r.erreur || "Erreur du serveur.")}</strong> Vérifiez que la clé API Mistral est dans le fichier .env et que l'index a été construit.</p><code>${echapper(r.detail || rep.status)}</code></div>`);
+    } else if (r.urgence) {
+      ajouter(blocUrgence(r.urgence));
+    } else if (r.trouve) {
+      ajouter(`<div class="reponse">
+        <p class="statut">Réponse trouvée dans les documents</p>
+        <div class="texte">${miseEnForme(r.reponse)}</div>
+        ${blocSources(r.sources)}
+        ${blocTechnique(r)}
+      </div>`);
+    } else {
+      ajouter(`<div class="reponse introuvable">
+        <p class="statut">Pas de réponse dans les documents</p>
+        <div class="texte">${miseEnForme(r.reponse)}</div>
+        ${blocTechnique(r)}
+      </div>`);
+    }
+  } catch (err) {
+    attente.remove();
+    ajouter(`<div class="erreur"><p><strong>Le serveur est injoignable.</strong> Vérifiez qu'il tourne avec la commande uvicorn dans le terminal.</p><code>${echapper(err)}</code></div>`);
+  } finally {
+    bouton.disabled = false; bouton.textContent = "Envoyer";
+    fil.lastElementChild.scrollIntoView({ behavior: "smooth", block: "start" });
+    champ.focus();
+  }
+}
+
+// Informations du projet (corpus, résultats)
+function pourcent(x) { return x == null ? "–" : Math.round(x * 100) + " %"; }
+
+fetch("/api/info").then((r) => r.json()).then((info) => {
+  const n = info.sources.length;
+  $("corpus-info").textContent = `${n} documents, ${info.nb_chunks ?? "?"} passages indexés. Modèle : ${info.modele}.`;
+  $("corpus-resume").textContent = `${n} documents publics, découpés en ${info.nb_chunks ?? "?"} passages. Chaque passage garde sa source, sa page et sa date, pour que l'agent puisse citer d'où vient l'information.`;
+  $("corpus").innerHTML = info.sources.map((s) => `<tr>
+    <td>${echapper(s.titre)}</td><td>${echapper(s.editeur)}</td><td class="chiffre">${echapper(s.date)}</td>
+    <td>${echapper(s.public)}</td><td>${echapper(s.commune)}</td></tr>`).join("");
+
+  const b = info.benchmark;
+  if (!b) { $("bench-intro").textContent = "Aucun résultat de test disponible pour le moment."; return; }
+  const [fausses, horsSujet] = String(b.fausses_reponses).split("/");
+  $("bench-intro").textContent = `Test sur ${b.nb_questions} questions (jeu « ${b.split} »), avec le modèle ${b.modele}, le ${b.date.replace("T", " à ")}.`;
+  const mesures = [
+    [pourcent(b.exactitude_decision), "de bonnes décisions : répondre quand c'est possible, refuser sinon"],
+    [`${fausses} sur ${horsSujet}`, "questions hors sujet auxquelles l'agent a quand même répondu"],
+    [pourcent(b.hit_at_k), "des questions où le bon passage a été retrouvé"],
+    [pourcent(b.couverture_faits), "des éléments attendus présents dans les réponses"],
+    [pourcent(b.precision_citations), "des sources citées qui étaient attendues"],
+    [`${String(b.latence_moyenne_s).replace(".", ",")} s`, "de temps de réponse moyen du modèle"],
+  ];
+  $("mesures").innerHTML = mesures.map(([v, l]) => `<div class="mesure"><strong>${v}</strong><span>${l}</span></div>`).join("");
+}).catch(() => {
+  $("corpus-info").textContent = "";
+  $("corpus-resume").textContent = "Impossible de charger les informations du projet.";
+  $("bench-intro").textContent = "";
+});
+</script>
+</body>
+</html>
