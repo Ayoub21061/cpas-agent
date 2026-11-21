@@ -1,0 +1,21 @@
+{
+  "nb_questions": 9,
+  "exactitude_decision": 1,
+  "fausses_reponses": "0/2",
+  "refus_a_tort": "0/7",
+  "hit_at_k": 0.857,
+  "precision_citations": 0.714,
+  "couverture_faits": 0.714,
+  "nb_appels_llm": 8,
+  "latence_moyenne_s": 0.729,
+  "tokens_entree_moyens": 1506.625,
+  "tokens_sortie_moyens": 102.125,
+  "langue_correcte": null,
+  "reponses_contredites": "0/1",
+  "benchmark": "benchmark.json",
+  "split": "test",
+  "k": 4,
+  "modele": "ministral-3b-latest",
+  "date": "2026-11-21T10:35",
+  "modele_traduction": "mistral-small-latest"
+}

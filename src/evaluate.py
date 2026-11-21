@@ -69,6 +69,10 @@ def faits_couverts(reponse, faits_attendus):
     manquants = [f for f in faits_attendus if not any(normaliser(v) in r for v in f)]
     return len(faits_attendus) - len(manquants), manquants
 
+def faits_contredits(reponse, faits_interdits):
+    """Affirmations fausses (connues) présentes dans la réponse."""
+    r = normaliser(reponse)
+    return [f[0] for f in faits_interdits if any(normaliser(v) in r for v in f)]
 
 def verifier_titres(cas):
     """Signale les titres du benchmark qui n'existent pas dans sources.csv (faute de frappe)."""
@@ -120,6 +124,8 @@ def evaluer_cas(cas, k):
             n, manquants = faits_couverts(r["reponse"], cas["faits_attendus"])
             ligne["couverture_faits"] = n / len(cas["faits_attendus"]) if cas["faits_attendus"] else None
             ligne["faits_manquants"] = manquants
+            if cas.get("faits_interdits"):
+                ligne["contredit"] = faits_contredits(r["reponse"], cas["faits_interdits"])
     return ligne
 
 
@@ -149,6 +155,8 @@ def resumer(lignes):
         "tokens_entree_moyens": moyenne([a["tokens_entree"] for a in appels]),
         "tokens_sortie_moyens": moyenne([a["tokens_sortie"] for a in appels]),
         "langue_correcte": moyenne([l.get("langue_ok") for l in lignes]),
+        "reponses_contredites": f"{sum(bool(l.get('contredit')) for l in lignes)}"
+                                f"/{sum('contredit' in l for l in lignes)}",
     }
 
 
@@ -180,6 +188,8 @@ if __name__ == "__main__":
             extra += f"  [réponse en {l['langue_reponse']}]"
         if l.get("faits_manquants"):
             extra += f"  [manque : {', '.join(f[0] for f in l['faits_manquants'])}]"
+        if l.get("contredit"):
+            extra += f"  [CONTREDIT : {', '.join(l['contredit'])}]"
         print(f"{etat} {l['id']}  {l['question'][:60]:60}{extra}")
 
     resume = resumer(lignes)
@@ -197,8 +207,8 @@ if __name__ == "__main__":
                    # nom réel du modèle (renvoyé par generate), sinon celui du .env
                    "modele": next((l["usage"]["modele"] for l in lignes if l["usage"]),
                                   os.getenv("LLM_MODEL", "ministral-3b-latest")),
-                   "date": datetime.now().isoformat(timespec="minutes"
-                   "modele_traduction": os.getenv("TRADUCTION_MODEL") or "même modèle",)})
+                   "date": datetime.now().isoformat(timespec="minutes"),
+                   "modele_traduction": os.getenv("TRADUCTION_MODEL") or "même modèle"})
 
     print("\n--- Résumé ---")
     for cle, val in resume.items():

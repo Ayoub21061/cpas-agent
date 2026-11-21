@@ -24,6 +24,7 @@ load_dotenv()
 
 # PROMPT_PATH = Path("prompts/answer.yaml")
 PROMPT_PATH = Path("prompts/answer_v2.yaml")
+# PROMPT_PATH = Path("prompts/answer_v3.yaml")
 LOG_PATH = Path("logs/llm_calls.jsonl")
 
 # # Message renvoyé quand la recherche ne trouve rien d'exploitable.
@@ -93,6 +94,23 @@ def load_prompt(path=PROMPT_PATH):
     template = ChatPromptTemplate.from_messages([("system", p["system"]), ("user", p["user"])])
     return template, p["version"]
 
+# Corrections relues par l'équipe : certains passages du corpus contiennent
+# une règle dépassée. On ne les supprime pas (le reste du passage est juste),
+# on y attache une note que le modèle lit avec l'extrait.
+CORRECTIONS_PATH = Path("data/corrections.csv")
+
+
+def charger_corrections():
+    if not CORRECTIONS_PATH.exists():
+        return {}
+    import csv
+    with open(CORRECTIONS_PATH, encoding="utf-8") as f:
+        return {(c["titre"], int(c["page"])): c["correction"]
+                for c in csv.DictReader(f, delimiter=";")}
+
+
+CORRECTIONS = charger_corrections()
+
 
 def format_contexte(resultats):
     """
@@ -104,8 +122,12 @@ def format_contexte(resultats):
     blocs = []
     for i, (doc, _score) in enumerate(resultats, start=1):
         m = doc.metadata
-        entete = f"{m['titre']}, p. {m['page']}, {m['date']}"
-        blocs.append(f'<extrait numero="{i}" source="{entete}">\n{doc.page_content}\n</extrait>')
+        entete = f"{m['titre']}, p. {m['page']}, document daté de {m['date']}"
+        texte = doc.page_content
+        correction = CORRECTIONS.get((m["titre"], int(m["page"])))
+        if correction:
+            texte += f"\n[CORRECTION de l'équipe : {correction}]"
+        blocs.append(f'<extrait numero="{i}" source="{entete}">\n{texte}\n</extrait>')
     return "\n\n".join(blocs)
 
 

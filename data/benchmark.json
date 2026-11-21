@@ -524,5 +524,110 @@
     "sources_attendues": [],
     "faits_attendus": [],
     "note": "Hors sujet."
+  },
+  {
+    "id": "q22",
+    "split": "dev",
+    "question": "Le CPAS ne m'a pas répondu après 30 jours. Combien de temps ai-je pour faire un recours ?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          19
+        ]
+      },
+      {
+        "titre": "Loi organique des CPAS du 8 juillet 1976",
+        "pages": [
+          10
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          30
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          80,
+          81
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "trois mois",
+        "3 mois"
+      ]
+    ],
+    "faits_interdits": [
+      [
+        "illimité",
+        "sans limite",
+        "pas de limite",
+        "pas de délai",
+        "à tout moment"
+      ]
+    ],
+    "note": "Ajoutée après avoir observé l'erreur : le guide Cultures & Santé (2015) parle d'un recours illimité, la loi actuelle dit 3 mois."
+  },
+  {
+    "id": "q23",
+    "split": "test",
+    "question": "Si le CPAS ne prend jamais de décision sur ma demande, est-ce que je peux contester, et jusqu'à quand ?",
+    "public": "général",
+    "commune": null,
+    "repondable": true,
+    "sources_attendues": [
+      {
+        "titre": "Loi du 26 mai 2002 droit à l'intégration sociale",
+        "pages": [
+          19
+        ]
+      },
+      {
+        "titre": "Loi organique des CPAS du 8 juillet 1976",
+        "pages": [
+          10
+        ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          30
+        ]
+      },
+      {
+        "titre": "Guide de l'aide sociale pour les étudiants",
+        "pages": [
+          80,
+          81
+        ]
+      }
+    ],
+    "faits_attendus": [
+      [
+        "trois mois",
+        "3 mois"
+      ],
+      [
+        "tribunal du travail"
+      ]
+    ],
+    "faits_interdits": [
+      [
+        "illimité",
+        "sans limite",
+        "pas de limite",
+        "pas de délai",
+        "à tout moment"
+      ]
+    ],
+    "note": "Même règle que q22, autre formulation. Jeu test : ne pas l'utiliser pour régler le prompt."
   }
 ]

@@ -118,7 +118,8 @@
   }
   .urgence h3 { color: var(--rouge); font-size: var(--t-titre3); margin-bottom: 0.5rem; }
   .urgence p { margin: 0 0 0.75rem; }
-  .urgence ul { margin: 0; padding-left: 1.2rem; }
+  .urgence ul { margin: 0; padding-inline-start: 1.2rem; }
+  .note-langue { font-size: var(--t-petit); color: var(--gris); margin: 0 0 0.75rem; }
   .urgence li { margin-bottom: 0.35rem; }
 
   .erreur { border-left: 3px solid var(--rouge); padding-left: 1.25rem; }
@@ -435,22 +436,109 @@ function blocSources(sources) {
   return `<div class="sources"><h3>D'où vient cette réponse</h3><ol>${items}</ol></div>`;
 }
 
-function blocUrgence(type) {
-  const intro = {
-    vie: "Vous traversez un moment très difficile. Vous pouvez en parler maintenant, gratuitement et de façon anonyme.",
-    danger: "Votre sécurité passe avant tout.",
-    rue: "Votre situation est urgente. Le CPAS de la commune où vous vous trouvez doit examiner une demande d'aide urgente.",
-  }[type];
-  return `<div class="urgence" role="alert">
-    <h3>Contactez quelqu'un maintenant</h3>
-    <p>${intro}</p>
+const NOMS_LANGUES = { fr: "français", nl: "néerlandais", en: "anglais", ar: "arabe", es: "espagnol",
+                       pt: "portugais", tr: "turc", ro: "roumain", pl: "polonais" };
+
+// Attributs lang et dir pour un bloc écrit dans la langue de la personne.
+function attrLangue(code) {
+  return NOMS_LANGUES[code] ? `lang="${code}" dir="${code === "ar" ? "rtl" : "ltr"}"` : 'dir="auto"';
+}
+
+// Note en français pour l'agent du CPAS qui regarde l'écran avec la personne.
+function noteLangue(code) {
+  if (!code || code === "fr" || !NOMS_LANGUES[code]) return "";
+  return `<p class="note-langue">Réponse en ${NOMS_LANGUES[code]}, rédigée à partir de documents en français.
+    Les termes entre parenthèses sont les noms officiels à utiliser au CPAS.</p>`;
+}
+
+// Textes d'urgence. Traductions à faire relire par des locuteurs natifs.
+const URGENCE_TXT = {
+  fr: { titre: "Contactez quelqu'un maintenant",
+        vie: "Vous traversez un moment très difficile. Vous pouvez en parler maintenant, gratuitement et de façon anonyme.",
+        danger: "Votre sécurité passe avant tout.",
+        rue: "Votre situation est urgente. Le CPAS de la commune où vous vous trouvez doit examiner une demande d'aide urgente.",
+        appel: "En cas de danger immédiat, appelez le", suicide: "Écoute prévention suicide, gratuite et anonyme, jour et nuit :",
+        violence: "Écoute violences conjugales et familiales, gratuite :",
+        cpas: "Rendez-vous au CPAS de la commune où vous êtes, ou demandez à quelqu'un de vous y accompagner." },
+  nl: { titre: "Neem nu contact op met iemand",
+        vie: "U maakt een heel moeilijke periode door. U kunt er nu over praten, gratis en anoniem.",
+        danger: "Uw veiligheid gaat voor alles.",
+        rue: "Uw situatie is dringend. Het OCMW van de gemeente waar u zich bevindt, moet een aanvraag voor dringende hulp onderzoeken.",
+        appel: "Bij direct gevaar: bel", suicide: "Zelfmoordlijn, gratis en anoniem, dag en nacht:",
+        violence: "Hulplijn geweld, gratis:",
+        cpas: "Ga naar het OCMW van de gemeente waar u bent, of vraag iemand om met u mee te gaan." },
+  en: { titre: "Contact someone now",
+        vie: "You are going through a very difficult time. You can talk about it now, free and anonymously.",
+        danger: "Your safety comes first.",
+        rue: "Your situation is urgent. The CPAS (public social welfare centre) of the municipality where you are must examine a request for urgent help.",
+        appel: "If you are in immediate danger, call", suicide: "Suicide prevention line, free and anonymous, day and night:",
+        violence: "Domestic violence helpline, free:",
+        cpas: "Go to the CPAS of the municipality where you are, or ask someone to go with you." },
+  es: { titre: "Contacte con alguien ahora",
+        vie: "Está pasando por un momento muy difícil. Puede hablar de ello ahora, de forma gratuita y anónima.",
+        danger: "Su seguridad es lo primero.",
+        rue: "Su situación es urgente. El CPAS del municipio donde se encuentra debe examinar una solicitud de ayuda urgente.",
+        appel: "En caso de peligro inmediato, llame al", suicide: "Línea de prevención del suicidio, gratuita y anónima, día y noche:",
+        violence: "Línea de ayuda contra la violencia doméstica, gratuita:",
+        cpas: "Acuda al CPAS del municipio donde se encuentra, o pida a alguien que le acompañe." },
+  pt: { titre: "Contacte alguém agora",
+        vie: "Está a passar por um momento muito difícil. Pode falar sobre isso agora, de forma gratuita e anónima.",
+        danger: "A sua segurança está em primeiro lugar.",
+        rue: "A sua situação é urgente. O CPAS do município onde se encontra deve analisar um pedido de ajuda urgente.",
+        appel: "Em caso de perigo imediato, ligue para o", suicide: "Linha de prevenção do suicídio, gratuita e anónima, dia e noite:",
+        violence: "Linha de apoio à violência doméstica, gratuita:",
+        cpas: "Dirija-se ao CPAS do município onde está, ou peça a alguém que o acompanhe." },
+  tr: { titre: "Hemen biriyle iletişime geçin",
+        vie: "Çok zor bir dönemden geçiyorsunuz. Şimdi bu konuda ücretsiz ve isimsiz olarak konuşabilirsiniz.",
+        danger: "Güvenliğiniz her şeyden önce gelir.",
+        rue: "Durumunuz acil. Bulunduğunuz belediyenin CPAS'ı acil yardım talebinizi incelemelidir.",
+        appel: "Acil tehlike durumunda arayın:", suicide: "İntiharı önleme hattı, ücretsiz ve isimsiz, gece gündüz:",
+        violence: "Aile içi şiddet yardım hattı, ücretsiz:",
+        cpas: "Bulunduğunuz belediyenin CPAS'ına gidin veya birinden size eşlik etmesini isteyin." },
+  ro: { titre: "Contactați pe cineva acum",
+        vie: "Treceți printr-o perioadă foarte grea. Puteți vorbi despre asta acum, gratuit și anonim.",
+        danger: "Siguranța dumneavoastră este pe primul loc.",
+        rue: "Situația dumneavoastră este urgentă. CPAS-ul din comuna în care vă aflați trebuie să examineze o cerere de ajutor urgent.",
+        appel: "În caz de pericol imediat, sunați la", suicide: "Linie de prevenire a sinuciderii, gratuită și anonimă, zi și noapte:",
+        violence: "Linie de ajutor pentru violență domestică, gratuită:",
+        cpas: "Mergeți la CPAS-ul din comuna în care vă aflați sau rugați pe cineva să vă însoțească." },
+  pl: { titre: "Skontaktuj się z kimś teraz",
+        vie: "Przechodzisz przez bardzo trudny czas. Możesz teraz o tym porozmawiać, bezpłatnie i anonimowo.",
+        danger: "Twoje bezpieczeństwo jest najważniejsze.",
+        rue: "Twoja sytuacja jest pilna. CPAS gminy, w której się znajdujesz, musi rozpatrzyć wniosek o pilną pomoc.",
+        appel: "W razie bezpośredniego zagrożenia zadzwoń pod numer", suicide: "Telefon zapobiegania samobójstwom, bezpłatny i anonimowy, przez całą dobę:",
+        violence: "Telefon pomocy w przypadku przemocy domowej, bezpłatny:",
+        cpas: "Udaj się do CPAS w gminie, w której jesteś, lub poproś kogoś, aby ci towarzyszył." },
+  ar: { titre: "تواصل مع شخص ما الآن",
+        vie: "أنت تمر بوقت صعب جدًا. يمكنك التحدث عن ذلك الآن، مجانًا ودون الكشف عن هويتك.",
+        danger: "سلامتك قبل كل شيء.",
+        rue: "وضعك عاجل. يجب على مركز CPAS في البلدية التي توجد فيها أن يدرس طلب مساعدة عاجلة.",
+        appel: "في حالة الخطر الفوري، اتصل بالرقم", suicide: "خط الوقاية من الانتحار، مجاني وسري، ليلًا ونهارًا:",
+        violence: "خط المساعدة لضحايا العنف الأسري، مجاني:",
+        cpas: "توجّه إلى مركز CPAS في البلدية التي توجد فيها، أو اطلب من شخص مرافقتك." },
+};
+
+function blocUrgence(type, langue) {
+  const t = URGENCE_TXT[langue] || URGENCE_TXT.fr;
+  // Les lignes d'écoute belges répondent en français ou en néerlandais :
+  // on met en premier celle qui correspond à la langue de la personne.
+  const nl = langue === "nl";
+  const ligne = (fr, nlNum) => nl
+    ? `<strong dir="ltr">${nlNum}</strong> (NL), <strong dir="ltr">${fr}</strong> (FR)`
+    : `<strong dir="ltr">${fr}</strong> (FR), <strong dir="ltr">${nlNum}</strong> (NL)`;
+  return `<div class="urgence" role="alert" ${attrLangue(langue)}>
+    <h3>${t.titre}</h3>
+    <p>${t[type]}</p>
     <ul>
-      <li>En cas de danger immédiat : appelez le <strong>112</strong>.</li>
-      ${type === "vie" ? "<li>Centre de prévention du suicide : <strong>0800 32 123</strong>, gratuit, jour et nuit.</li>" : ""}
-      <li>Rendez-vous au CPAS de la commune où vous êtes, ou demandez à quelqu'un de vous y accompagner.</li>
+      <li>${t.appel} <strong dir="ltr">112</strong>.</li>
+      ${type === "vie" ? `<li>${t.suicide} ${ligne("0800 32 123", "1813")}</li>` : ""}
+      ${type === "danger" ? `<li>${t.violence} ${ligne("0800 30 030", "1712")}</li>` : ""}
+      <li>${t.cpas}</li>
     </ul>
   </div>`;
 }
+
+let langueConversation = null;  // langue de la dernière réponse, renvoyée au serveur
 
 async function poser() {
   const question = champ.value.trim();
@@ -460,7 +548,7 @@ async function poser() {
   $("accueil").hidden = true;
   $("suggestions").hidden = true;
   const precision = [libellePublic(profil.public), profil.commune].filter(Boolean).join(", ");
-  ajouter(`<div class="question-utilisateur">${echapper(question)}<span class="profil-question">${echapper(precision)}</span></div>`);
+  ajouter(`<div class="question-utilisateur" dir="auto">${echapper(question)}<span class="profil-question">${echapper(precision)}</span></div>`);
   champ.value = ""; champ.style.height = "auto";
   bouton.disabled = true; bouton.textContent = "Recherche…";
   const attente = ajouter(`<div class="attente">L'agent cherche dans les documents<span class="ligne"></span></div>`);
@@ -470,26 +558,28 @@ async function poser() {
     const rep = await fetch("/api/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question, ...profil }),
+      body: JSON.stringify({ question, ...profil, langue: langueConversation }),
     });
     const r = await rep.json();
     attente.remove();
+    if (rep.ok && r.langue) langueConversation = r.langue;
 
     if (!rep.ok) {
       ajouter(`<div class="erreur"><p><strong>${echapper(r.erreur || "Erreur du serveur.")}</strong> Vérifiez que la clé API Mistral est dans le fichier .env et que l'index a été construit.</p><code>${echapper(r.detail || rep.status)}</code></div>`);
     } else if (r.urgence) {
-      ajouter(blocUrgence(r.urgence));
+      ajouter(blocUrgence(r.urgence, r.langue));
     } else if (r.trouve) {
       ajouter(`<div class="reponse">
         <p class="statut">Réponse trouvée dans les documents</p>
-        <div class="texte">${miseEnForme(r.reponse)}</div>
+        ${noteLangue(r.langue)}
+        <div class="texte" ${attrLangue(r.langue)}>${miseEnForme(r.reponse)}</div>
         ${blocSources(r.sources)}
         ${blocTechnique(r)}
       </div>`);
     } else {
       ajouter(`<div class="reponse introuvable">
         <p class="statut">Pas de réponse dans les documents</p>
-        <div class="texte">${miseEnForme(r.reponse)}</div>
+        <div class="texte" ${attrLangue(r.langue)}>${miseEnForme(r.reponse)}</div>
         ${blocTechnique(r)}
       </div>`);
     }

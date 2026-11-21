@@ -49,27 +49,30 @@ _detecteur = (LanguageDetectorBuilder
               .build())
 
 
-def detecter_langue(texte):
-    """Renvoie le code de la langue du texte ("fr", "nl", "ar"...)."""
+def detecter_langue(texte, defaut=PAR_DEFAUT):
+    """Code de la langue du texte. Si la détection n'est pas sûre, renvoie
+    `defaut` (par exemple la langue de la question précédente)."""
     mots = re.findall(r"\w+", (texte or "").lower())
     if not mots:
-        return PAR_DEFAUT
+        return defaut
 
-    # 1. Le message commence par une salutation connue ?
+    # Salutation courte ("hallo", "hello there") : le dictionnaire suffit.
     salutation = SALUTATIONS.get(mots[0])
     if salutation and len(mots) <= 3:
-        return salutation              # « hallo », « Hello! », « Dag mevrouw »
-    if len(mots) < 2:
-        return PAR_DEFAUT              # un seul mot inconnu : trop peu pour décider
+        return salutation
 
-    # 2. Sinon, Lingua
+    # Un seul mot : trop court pour Lingua.
+    if len(mots) < 2:
+        return defaut
+
+    # Lingua : on accepte si la première langue est assez probable
+    # ET nettement devant la deuxième.
     scores = _detecteur.compute_language_confidence_values(texte)
     premiere, deuxieme = scores[0], scores[1]
     if premiere.value >= CONFIANCE_MIN and premiere.value >= ECART_MIN * deuxieme.value:
         return _CODES[premiere.language]
 
-    # 3. Lingua hésite : la salutation du début tranche, sinon le français
-    return salutation or PAR_DEFAUT
+    return salutation or defaut
 
 
 def nom_langue(code):
