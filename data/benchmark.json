@@ -93,6 +93,19 @@
           8,
           9
         ]
+      },
+      {
+        "titre": "Guide pour les usagers du CPAS",
+        "pages": [
+          29,
+          30
+        ]
+      },
+      {
+        "titre": "Guide d'accompagnement CPAS",
+        "pages": [
+          26
+        ]
       }
     ],
     "faits_attendus": [
@@ -104,7 +117,7 @@
         "tribunal du travail"
       ]
     ],
-    "note": "Recours dans les 3 mois devant le tribunal du travail (Loi art. 47, p.19)."
+    "note": "Recours dans les 3 mois devant le tribunal du travail (Loi art. 47, p.19). Sources attendues complétées le 21/11 (usagers p. 29-30, accompagnement p. 26) après lecture des passages."
   },
   {
     "id": "q04",
